@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { date, z } from "zod";
+import { z } from "zod";
 import { publicProcedure } from "../trpc";
 import { prisma } from "~/server/db";
 import { DateTime } from "luxon";
@@ -186,7 +186,7 @@ export const getRefillEstimate = publicProcedure
 
         const regressionData = await prisma.$queryRaw<{linear_regresion: number}[]>`${rawQuery}`;
 
-      console.log("Regression result:", regressionData[0]!.linear_regresion);
+      console.log("Regression result:", regressionData[0]?.linear_regresion);
       if(regressionData[0]?.linear_regresion == null || regressionData[0]?.linear_regresion == undefined) {
             throw new TRPCError({
                 code: 'BAD_REQUEST',
@@ -201,9 +201,11 @@ export const getRefillEstimate = publicProcedure
                 deviceId: input.deviceId,
                 levelLogId: lastRefill.id,
                 t0: lastRefill.timestamp,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 tmax: tmax!.timestamp,
 
                 value: 0,
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 tOnValue: DateTime.fromSeconds(DateTime.fromJSDate(lastRefill.timestamp).toSeconds() + regressionData[0]!.linear_regresion).toJSDate(),
 
             }
