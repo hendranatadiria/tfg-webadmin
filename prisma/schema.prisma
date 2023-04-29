@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Device {
+  id       String   @id @default(cuid())
+  name     String
+  location String?
+  TempLogs TemperatureLog[]
+  LevelLogs LevelLog[]
+}
+
+model TemperatureLog {
+  id        String   @default(cuid())
+  deviceId  String
+  device    Device   @relation(fields: [deviceId], references: [id])
+  timestamp DateTime @default(now())
+  value     Float
+
+  @@unique([deviceId, timestamp])
+}
+
+model LevelLog {
+  id        String   @default(cuid())
+  idSerial  Int      @default(autoincrement())
+  deviceId  String
+  device    Device   @relation(fields: [deviceId], references: [id])
+  timestamp DateTime @default(now())
+  height    Float
+  level     Float
+  isT0      Boolean  @default(false)
+
+  @@unique([deviceId, timestamp])
+}
+
+model RegressionHistory {
+  id        String   @default(cuid()) @unique // a device with certain t0 & tmax can have multiple value regression, hence the @unique on id instead of other fields.
+  levelLogId String
+  deviceId  String
+  t0        DateTime
+  tmax      DateTime
+
+  value     Float
+  tOnValue  DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
