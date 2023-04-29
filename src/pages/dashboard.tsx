@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Autocomplete, Box, Button, Card, CircularProgress, Container, Grid, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { DateRangePicker } from 'rsuite';
@@ -20,13 +15,24 @@ import {
     Title,
     Tooltip,
     Legend,
+    type CoreChartOptions,
+    type ElementChartOptions,
+    type PluginChartOptions,
+    type DatasetChartOptions,
+    type ScaleChartOptions,
+    type LineControllerChartOptions,
   } from 'chart.js';
 import 'chartjs-adapter-luxon';
 import Link from 'next/link';
+import { type _DeepPartialObject } from 'chart.js/dist/types/utils';
 
-type IProps = Record<string, never>;
-export default function Dashboard(_props) {
-    const options = {
+export default function Dashboard() {
+    const options: _DeepPartialObject<CoreChartOptions<"line"> 
+        & ElementChartOptions<"line"> 
+        & PluginChartOptions<"line"> 
+        & DatasetChartOptions<"line"> 
+        & ScaleChartOptions<"line">
+        & LineControllerChartOptions>  = {
         responsive: true,
         plugins: {
           legend: {
@@ -37,7 +43,8 @@ export default function Dashboard(_props) {
             x: {
                 type: 'timeseries',
                 ticks: {
-                    callback: (value:number) => {
+                    callback: (val:string|number) => {
+                        const value = Number(val);
                         return DateTime.fromMillis(value).toFormat('HH:mm');
                     }
                 }
@@ -57,8 +64,6 @@ export default function Dashboard(_props) {
       );
 
     const [hasInit, setHasInit] = useState<boolean>(false);
-    const [series, setSeries] = useState<{label: string, data: {x: Date, y: number}[]}[]>([]);
-    const [seriesLiquid, setSeriesLiquid] = useState<{label: string, data: {x: Date, y: number|null}[]}[]>([]);
     const [startDate, setStartDate] = useState<Date>(DateTime.now().minus({days: 7}).startOf('day').toJSDate());
     const [endDate, setEndDate] = useState<Date>(DateTime.now().toJSDate());
     const [deviceId, setDeviceId] = useState<string>('');
@@ -86,36 +91,6 @@ export default function Dashboard(_props) {
     };
 
     useEffect(() => {
-        if (tempQuery.data) {
-            const data = tempQuery.data.tempData.map((item) => {
-                return {
-                    x: item.timestamp,
-                    y: item.value
-                }
-            })
-            setSeries([{
-                label: "Temperature",
-                data: data
-            }]);
-        }
-    }, [tempQuery.data])
-    useEffect(() => {
-        if (liquidQuery.data) {
-            console.log(liquidQuery.data.bucketedData);
-            const data = liquidQuery.data.bucketedData.map((item) => {
-                return {
-                    x: item.bucket,
-                    y: item.avgLevel
-                }
-            })
-            setSeriesLiquid([{
-                label: "Liquid Level",
-                data: data
-            }]);
-        }
-    }, [liquidQuery.data])
-
-    useEffect(() => {
         if (deviceQuery.data) {
             setDeviceId(deviceQuery.data[0]?.id??'');
         }
@@ -127,6 +102,7 @@ export default function Dashboard(_props) {
             setHasInit(true);
             refetchAll();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lastRefillQuery.data])
 
   return (

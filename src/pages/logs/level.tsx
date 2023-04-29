@@ -5,12 +5,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DateRangePicker } from "rsuite";
 import 'rsuite/dist/rsuite.min.css'; // or 'rsuite/dist/rsuite.min.css'
-import { isNull } from "util";
 import { api } from "~/utils/api";
 
-type IProps = Record<string, never>
-
-const LevelLogPage = (_props) => {
+const LevelLogPage = () => {
     const {query, push} = useRouter();
     const [startDate, setStartDate] = useState<Date|undefined>(DateTime.now().minus({days: 7}).startOf('day').toJSDate());
     const [endDate, setEndDate] = useState<Date|undefined>(DateTime.now().toJSDate());
@@ -36,6 +33,7 @@ const LevelLogPage = (_props) => {
             queryNew.deviceId = deviceId;
         }
         void push({ query: { ...queryNew} }, undefined, { shallow: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [deviceId]);
 
     const StyledDataGrid = styled(DataGrid)(({ theme }) => ({

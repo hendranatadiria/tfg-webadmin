@@ -6,7 +6,7 @@ import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
 import AppBarMenu from "~/Components/AppBarMenu";
-import { CssBaseline, ThemeProvider, createTheme, useMediaQuery } from "@mui/material";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { useMemo } from "react";
 
 const MyApp: AppType<{ session: Session | null }> = ({
