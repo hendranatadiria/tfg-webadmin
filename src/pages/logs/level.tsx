@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { DateRangePicker } from "rsuite";
 import 'rsuite/dist/rsuite.min.css'; // or 'rsuite/dist/rsuite.min.css'
 import { api } from "~/utils/api";
+import Head from 'next/head';
+
 
 const LevelLogPage = () => {
     const {query, push} = useRouter();
@@ -54,6 +56,10 @@ const LevelLogPage = () => {
 
 
     return (
+        <>
+        <Head>
+            <title>Liquid Level Logs | Cloud-Connected Smart Hand Sanitizer Dispenser Web Admin</title>
+        </Head>
         <Container maxWidth="xl" sx={{pt:5, mb: 10}}>
         <Box>
             <Typography variant="h4">Liquid Level Log Data</Typography>
@@ -147,6 +153,7 @@ const LevelLogPage = () => {
             </Grid>
         </Grid>
         </Container>
+        </>
     );
 }
 

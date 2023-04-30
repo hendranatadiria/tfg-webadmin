@@ -24,10 +24,10 @@ const pageData = [
         name: 'Temperature Logs',
         url: '/logs/temperature'
     },
-    {
-        name: 'Regression Config',
-        url: '/config-regression'
-    }
+    // {
+    //     name: 'Regression Config',
+    //     url: '/config-regression'
+    // }
 ];
 function AppBarMenu() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);

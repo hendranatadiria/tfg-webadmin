@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { DateRangePicker } from "rsuite";
 import 'rsuite/dist/rsuite.min.css'; // or 'rsuite/dist/rsuite.min.css'
 import { api } from "~/utils/api";
+import Head from 'next/head';
 
 const TemperatureLogPage = () => {
     const {query, push} = useRouter();
@@ -38,6 +39,10 @@ const TemperatureLogPage = () => {
 
 
     return (
+        <>
+        <Head>
+            <title>Temperature Logs | Cloud-Connected Smart Hand Sanitizer Dispenser Web Admin</title>
+        </Head>
         <Container maxWidth="xl" sx={{pt:5, mb: 10}}>
         <Box>
             <Typography variant="h4">Temperature Log Data</Typography>
@@ -126,6 +131,7 @@ const TemperatureLogPage = () => {
             </Grid>
         </Grid>
         </Container>
+        </>
     );
 }
 

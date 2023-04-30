@@ -120,7 +120,9 @@ export const getLastRefill = publicProcedure
 
 export const getRefillEstimate = publicProcedure
     .input(z.object({
-        deviceId: z.string()
+        deviceId: z.string(),
+        lastRefillId: z.string(),
+        force: z.boolean().optional(),
     }))
     .query(async ({input}) => {
 
@@ -134,16 +136,9 @@ export const getRefillEstimate = publicProcedure
     // basic logic first. if the regression is not found, then do regression and insert. if found, then use that to predict the next refill
     // 1. get last refill
     const lastRefill = await prisma.levelLog.findFirst({
-        orderBy: {
-            timestamp: 'desc'
-        },
         where: {
-            isT0: true,
-            level: {
-                gt: 0
-            },
-            deviceId: input.deviceId
-        },
+            id: input.lastRefillId,
+        }
     });
 
     if (lastRefill === null) {
@@ -162,7 +157,7 @@ export const getRefillEstimate = publicProcedure
         },
     });
 
-    if (lastRegression === null) {
+    if (lastRegression === null || lastRegression.tOnValue < lastRefill.timestamp || input.force === true) {
         const tmax = await prisma.levelLog.findFirst({
             orderBy: {
                 timestamp: 'desc'
