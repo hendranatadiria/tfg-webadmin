@@ -10,6 +10,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Link from 'next/link';
+import useFirebaseAuth from '~/hooks/useFirebaseAuth';
+import { TextField } from '@mui/material';
 
 const pageData = [
     {
@@ -24,10 +26,10 @@ const pageData = [
         name: 'Temperature Logs',
         url: '/logs/temperature'
     },
-    // {
-    //     name: 'Regression Config',
-    //     url: '/config-regression'
-    // }
+    {
+        name: 'Regression Config',
+        url: '/config-regression'
+    }
 ];
 function AppBarMenu() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -39,6 +41,8 @@ function AppBarMenu() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const authFirebase = useFirebaseAuth();
 
   return (
     <AppBar position="static">
@@ -83,18 +87,26 @@ function AppBarMenu() {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pageData.map((page) => (
-                <Link href={page.url} passHref key={page.url}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'space-between', alignItems:'center'}}>
+            <Box display="flex">
+              {pageData.map((page) => (
+                  <Link href={page.url} passHref key={page.url}
+                  >
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, mr: 4, color: 'white', display: 'block' }}
                 >
-              <Button
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, mr: 4, color: 'white', display: 'block' }}
-              >
-                {page.name}
-              </Button>
-              </Link>
-            ))}
+                  {page.name}
+                </Button>
+                </Link>
+              ))}
+            </Box>
+            <Box sx={{my:2}}>
+                {authFirebase.authUser == null ? (<Link href="/login"><Button sx={{color: '#ffffff', borderColor: '#ffffff'}}>Log In</Button></Link>) : (<Box gap={2} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}> <Typography variant='body1' color="white">{authFirebase.authUser.email}</Typography>
+                <Button variant='outlined' size="small" sx={{color: '#ffffff', borderColor: '#ffffff'}} onClick={() => {
+                  void authFirebase.signOut()
+                }}>Log Out</Button></Box>) }
+            </Box>
           </Box>
         </Toolbar>
       </Container>
