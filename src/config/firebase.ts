@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import Firebase from 'firebase/compat/app';
 // import { getAnalytics } from "firebase/analytics";
 import {getAuth} from "firebase/auth";
+import {getStorage} from "firebase/storage";
 import { exit } from "process";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -33,4 +34,5 @@ const parseJSON: {
 const app = initializeApp(parseJSON);
 export const auth = getAuth(app);
 // const analytics = getAnalytics(app);
+export const useStorage = () => getStorage(app);
 export default Firebase;

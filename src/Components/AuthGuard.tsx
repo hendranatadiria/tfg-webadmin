@@ -8,9 +8,6 @@ const AuthGuard = ({children}: {children: ReactNode}) => {
     const firebaseAuth = useFirebaseAuth();
     const route = useRouter();
     
-    console.log('------------------RERENDER')
-    console.log(firebaseAuth.authUser);
-    console.log(firebaseAuth.loading);
 
     useEffect(() => {
         if (firebaseAuth.authUser == null && !firebaseAuth.loading) {
@@ -18,7 +15,7 @@ const AuthGuard = ({children}: {children: ReactNode}) => {
             void route.replace(`/login?next=${nextUrl}`);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [firebaseAuth.authUser])
+    }, [firebaseAuth.authUser, firebaseAuth.loading])
 
     return (
         <>

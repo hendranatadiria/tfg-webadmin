@@ -145,16 +145,23 @@ export default function Dashboard() {
     </Head>
     <Container maxWidth="xl" sx={{pt:5, mb:10}}>
         <Grid container spacing={2} alignItems='stretch'>
-            <Grid item xs={12} md={6} >
+            <Grid item xs={12} md={3} >
             <Box display='flex' flexDirection='column' justifyContent='center' sx={{height: '100%'}}>
                 <Typography variant="h4">Dashboard</Typography>
-                <Typography variant="body1">Cloud-Connected Smart Hand Sanitizer Dispenser Data</Typography>
+                <Typography variant="body1">Cloud-Connected<br />Smart Hand Sanitizer Dispenser Data</Typography>
             </Box>
             </Grid>
             <Grid item xs={12} md={3}>
                 <Card variant='outlined' sx={{p:2, height:'100%'}}>
+                    <Typography variant="body1" sx={{py:1}}>Usage Frequency</Typography>
+                    <Typography variant="h4">{tempQuery.status == 'success' ? (tempQuery.data !== undefined && tempQuery.data !== null ? `${tempQuery.data.tempData.length}x` : 'No Data') : (tempQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')} </Typography>
+                    <Typography variant="body1" sx={{py:1}}>{tempQuery.status == 'success' ? (tempQuery.data !== undefined && tempQuery.data !== null ? `Since ${DateTime.fromJSDate(tempQuery.data.tempData[tempQuery.data.tempData.length-1]?.timestamp).toFormat('dd LLL yyyy HH:mm')}`: 'No Data' ): (tempQuery.status == 'loading' ? '': tempQuery.error.message)}</Typography>
+                </Card>
+            </Grid>
+            <Grid item xs={12} md={3}>
+                <Card variant='outlined' sx={{p:2, height:'100%'}}>
                     <Typography variant="body1" sx={{py:1}}>Last Refill/Starting Data</Typography>
-                    <Typography variant="h4">{lastRefillQuery.status == 'success' ? (lastRefillQuery.data !== undefined && lastRefillQuery.data !== null ? DateTime.fromJSDate(lastRefillQuery.data.timestamp).toRelative(): 'No Data' ): (lastRefillQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')} </Typography>
+                    <Typography variant="h4">{lastRefillQuery.status == 'success' ? (lastRefillQuery.data !== undefined && lastRefillQuery.data !== null ? DateTime.fromJSDate(lastRefillQuery.data.timestamp).setLocale('en-US').toRelative(): 'No Data' ): (lastRefillQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')} </Typography>
                     <Typography variant="body1" sx={{py:1}}>{lastRefillQuery.status == 'success' ? (lastRefillQuery.data !== undefined && lastRefillQuery.data !== null ? DateTime.fromJSDate(lastRefillQuery.data.timestamp).toFormat('dd LLL yyyy HH:mm'): 'No Data' ): (lastRefillQuery.status == 'loading' ? '': lastRefillQuery.error.message)}</Typography>
                 </Card>
             </Grid>
@@ -162,9 +169,9 @@ export default function Dashboard() {
                 <Card variant='outlined' sx={{p:2}}>
                     <Box display='flex' alignItems='center' justifyContent='space-between'>
                         <Typography variant="body1">Next Refill Estimation</Typography>
-                        <IconButton onClick={() => forceRetrain()}><ModelTraining /></IconButton>
+                        <IconButton onClick={() => void forceRetrain()}><ModelTraining /></IconButton>
                     </Box>
-                    <Typography variant="h4">{refillEstimateQuery.status == 'success' ? (refillEstimateQuery.data !== undefined && refillEstimateQuery.data !== null ? DateTime.fromJSDate(refillEstimateQuery.data.tOnValue).toRelative(): 'No Data') : (refillEstimateQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')}</Typography>
+                    <Typography variant="h4">{refillEstimateQuery.status == 'success' ? (refillEstimateQuery.data !== undefined && refillEstimateQuery.data !== null ? DateTime.fromJSDate(refillEstimateQuery.data.tOnValue).setLocale('en-US').toRelative(): 'No Data') : (refillEstimateQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')}</Typography>
                     <Typography variant="body1" sx={{py:1}}>{refillEstimateQuery.status == 'success' ? (refillEstimateQuery.data !== undefined && refillEstimateQuery.data !== null ? DateTime.fromJSDate(refillEstimateQuery.data.tOnValue).toFormat('dd LLL yyyy HH:mm'): 'No Data') : (refillEstimateQuery.status == 'loading' ? '': refillEstimateQuery.error.message)}</Typography>
                 </Card>
             </Grid>

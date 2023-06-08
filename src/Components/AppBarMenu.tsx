@@ -27,8 +27,9 @@ const pageData = [
         url: '/logs/temperature'
     },
     {
-        name: 'Regression Config',
-        url: '/config-regression'
+        name: 'Manage Log Backup Data',
+        url: '/manage-data',
+        isAuthed: true
     }
 ];
 function AppBarMenu() {
@@ -78,18 +79,18 @@ function AppBarMenu() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pageData.map((page) => (
+              {pageData.map((page) => page.isAuthed == undefined || (page?.isAuthed && authFirebase.authUser !== null && !authFirebase.loading) ?  (
                 <MenuItem key={page.url} onClick={handleCloseNavMenu}>
                     <Link href={page.url} passHref>
                         <Typography textAlign="center">{page.name}</Typography>
                     </Link>
                 </MenuItem>
-              ))}
+              ) : (<div key={page.url}></div>))}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'space-between', alignItems:'center'}}>
             <Box display="flex">
-              {pageData.map((page) => (
+              {pageData.map((page) => page.isAuthed == undefined || (page?.isAuthed && authFirebase.authUser !== null && !authFirebase.loading) ? (
                   <Link href={page.url} passHref key={page.url}
                   >
                 <Button
@@ -99,7 +100,7 @@ function AppBarMenu() {
                   {page.name}
                 </Button>
                 </Link>
-              ))}
+              ) : (<div key={page.url}></div>))}
             </Box>
             <Box sx={{my:2}}>
                 {authFirebase.authUser == null ? (<Link href="/login"><Button sx={{color: '#ffffff', borderColor: '#ffffff'}}>Log In</Button></Link>) : (<Box gap={2} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}> <Typography variant='body1' color="white">{authFirebase.authUser.email}</Typography>
