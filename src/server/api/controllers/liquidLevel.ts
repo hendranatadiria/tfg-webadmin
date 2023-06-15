@@ -182,7 +182,7 @@ export const getRefillEstimate = publicProcedure
         const regressionData = await prisma.$queryRaw<{linear_regresion: number}[]>`${rawQuery}`;
 
       console.log("Regression result:", regressionData[0]?.linear_regresion);
-      if(regressionData[0]?.linear_regresion == null || regressionData[0]?.linear_regresion == undefined) {
+      if(regressionData[0]?.linear_regresion == null || regressionData[0]?.linear_regresion == undefined || regressionData[0]?.linear_regresion < 0) {
             throw new TRPCError({
                 code: 'BAD_REQUEST',
                 message: 'Too little data to do forecasting',

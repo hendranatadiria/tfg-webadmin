@@ -155,7 +155,7 @@ export default function Dashboard() {
                 <Card variant='outlined' sx={{p:2, height:'100%'}}>
                     <Typography variant="body1" sx={{py:1}}>Usage Frequency</Typography>
                     <Typography variant="h4">{tempQuery.status == 'success' ? (tempQuery.data !== undefined && tempQuery.data !== null ? `${tempQuery.data.tempData.length}x` : 'No Data') : (tempQuery.status == 'loading' ? <CircularProgress size={20} />: 'Error')} </Typography>
-                    <Typography variant="body1" sx={{py:1}}>{tempQuery.status == 'success' ? (tempQuery.data !== undefined && tempQuery.data !== null ? `Since ${DateTime.fromJSDate(tempQuery.data.tempData[tempQuery.data.tempData.length-1]?.timestamp).toFormat('dd LLL yyyy HH:mm')}`: 'No Data' ): (tempQuery.status == 'loading' ? '': tempQuery.error.message)}</Typography>
+                    <Typography variant="body1" sx={{py:1}}>{tempQuery.status == 'success' ? (tempQuery.data !== undefined && tempQuery.data !== null && tempQuery.data.tempData.length > 0? `Since ${DateTime.fromJSDate(tempQuery.data.tempData[tempQuery.data.tempData.length-1]?.timestamp).toFormat('dd LLL yyyy HH:mm')}`: 'No Data' ): (tempQuery.status == 'loading' ? '': tempQuery.error.message)}</Typography>
                 </Card>
             </Grid>
             <Grid item xs={12} md={3}>
