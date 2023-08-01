@@ -9,6 +9,7 @@ import AppBarMenu from "~/Components/AppBarMenu";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { useMemo } from "react";
 import Head from "next/head";
+import { Toaster } from "react-hot-toast";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -32,6 +33,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <title>Cloud-Connected Smart Hand Sanitizer Dispenser Web Admin</title>
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
   </Head>
+    <Toaster/>
     <ThemeProvider theme={theme}>
           <CssBaseline />
     <SessionProvider session={session}>

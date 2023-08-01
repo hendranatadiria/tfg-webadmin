@@ -35,6 +35,7 @@
     "react-apexcharts": "^1.4.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
     "rsuite": "^5.31.0",
     "superjson": "1.12.2",
     "zod": "^3.21.4"

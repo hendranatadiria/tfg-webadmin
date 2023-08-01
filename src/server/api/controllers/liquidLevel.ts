@@ -158,6 +158,7 @@ export const getRefillEstimate = publicProcedure
     });
 
     if (lastRegression === null || lastRegression.tOnValue < lastRefill.timestamp || input.force === true) {
+        console.log("Regression not found or too old. Doing regression now...");
         const tmax = await prisma.levelLog.findFirst({
             orderBy: {
                 timestamp: 'desc'
@@ -170,6 +171,13 @@ export const getRefillEstimate = publicProcedure
                 isT0: false,
             },
         });
+
+        if (lastRefill.id === tmax?.id || (tmax !== null && tmax.timestamp < lastRefill.timestamp)) {
+            throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: 'Too little data to do forecasting',
+            });
+        }
 
         const rawQuery = Prisma.sql`
         SELECT linear_regresion(

@@ -27,6 +27,7 @@ import Link from 'next/link';
 import { type _DeepPartialObject } from 'chart.js/dist/types/utils';
 import { ModelTraining } from '@mui/icons-material';
 import Head from 'next/head';
+import toast from 'react-hot-toast';
 
 export default function Dashboard() {
     const options: _DeepPartialObject<CoreChartOptions<"line"> 
@@ -90,6 +91,10 @@ export default function Dashboard() {
         force: forceRegress
     }, {
         enabled: (deviceId !==undefined && lastRefillQuery.data !== null && lastRefillQuery.data !==undefined && lastRefillQuery.status == 'success'), 
+        onError: (err) => {
+            console.log("ERROR!!!!");
+            toast.error(err.message);
+        },
         refetchOnWindowFocus: false});
 
     const refetchAll = () => {
