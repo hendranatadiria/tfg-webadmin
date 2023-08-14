@@ -181,6 +181,7 @@ export const getRefillEstimate = publicProcedure
 
         const rawQuery = Prisma.sql`
         SELECT linear_regresion(
+          ${lastRefill.deviceId}::text,
           (${lastRefill.timestamp}::timestamptz)::timestamp,
           0,
           (${tmax?.timestamp}::timestamptz)::timestamp
